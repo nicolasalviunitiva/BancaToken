@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Inserimento Utente</h2>
+
+<form action="/utente/newutente" method="post">
+    <div>
+        <br><label>Nome:</label><br>
+        <input type="text" id="nome" name="nome" required>
+    </div>
+    <div>
+        <br><label>Cognome:</label><br>
+        <input type="text" id="cognome" name="cognome" required>
+    </div>
+    <div>
+        <br><label>Et&agrave;:</label><br>
+        <input type="number" id="eta" name="eta" min="0" required>
+    </div>
+    <div>
+        <br><button type="submit">Invia</button>
+    </div>
+</form> 
+
+</body>
+</html>
