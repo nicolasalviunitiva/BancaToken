@@ -32,9 +32,9 @@ public class MovimentiController {
     }
 
     @POST
-    @RolesAllowed("Admin")
-    @Transactional
+    @RolesAllowed("User")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
     @Path("/versamento")
     public String accredito(@QueryParam("id_utente") Long idUtente, @QueryParam("importo") BigDecimal importo) {
         Utente utente = utenteService.findById(idUtente);
@@ -45,6 +45,8 @@ public class MovimentiController {
     }
 
     @POST
+    @RolesAllowed("User")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("/prelievo")
     public String prelievo(@QueryParam("id_utente") Long idUtente, @QueryParam("importo") BigDecimal importo) {
@@ -62,6 +64,8 @@ public class MovimentiController {
     }
 
     @POST
+    @RolesAllowed("User")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("/accredito")
     public String accredito(@QueryParam("id_utente") Long idUtente, @QueryParam("id_conto") Long idConto, @QueryParam("importo") BigDecimal importo) {
