@@ -9,6 +9,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
@@ -53,5 +54,19 @@ public class ContoController {
             return Response.status(400).entity("ATTENZIONE! Il conto corrente non è stato trovato.").build();
         }
     }
+    
+    @PUT
+    @Transactional
+    @RolesAllowed({ "User", "Admin" })
+    @Path("/visibilita/{id}/{stato}")
+    public Response modAttivo (@PathParam("id") Long id, @PathParam("stato") boolean stato){
+        Boolean esito = contoService.modAttivo(id, stato);
+        if (esito == true){
+            return Response.ok("Aggiornamento: stato conoto impostato come: "+contoService.findById(id).isAttivo()).build();
+        } else {
+            return Response.status(400).entity("ID utente non trovato").build();
+        }
+    }
+    
 
 }
