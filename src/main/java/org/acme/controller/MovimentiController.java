@@ -82,7 +82,6 @@ public class MovimentiController {
         } else {
             return "ATTENZIONE! numeroconto errato!";
         }
-
         return "acredito";
     }
 

@@ -13,16 +13,21 @@ public class UtenteService {
         this.utenteRepository = utenteRepository;
     }
 
-    public void newUtente (Utente utente){      
-        utenteRepository.persist(utente);  
+    public boolean newUtente (Utente utente){      
+        if(utente.getNome()!=null && utente.getCognome()!=null && utente.getEta()!=null){
+            utenteRepository.persist(utente);  
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Utente findById (Long id){
         return utenteRepository.findById(id);
     }
 
-    public void deleteById (Long id){
-         utenteRepository.deleteById(id);
+    public boolean deleteById (Long id){
+         return utenteRepository.deleteById(id);
 
     }
 

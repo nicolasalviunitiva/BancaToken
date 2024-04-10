@@ -1,6 +1,7 @@
 package org.acme.service;
 
 import org.acme.model.Conto;
+import org.acme.model.Utente;
 import org.acme.repository.ContoRepository;
 import org.acme.repository.UtenteRepository;
 
@@ -17,9 +18,15 @@ public class ContoService {
         this.utenteRepository = utenteRepository;
     }
 
-    public void newConto (Conto conto, Long idUtente){
-        contoRepository.persist(conto);
-        utenteRepository.findById(idUtente).setConto(conto);
+    public boolean newConto (Conto conto, Long idUtente){
+        Utente utente = utenteRepository.findById(idUtente);
+        if (utente.getConto() == null){
+            contoRepository.persist(conto);
+            utente.setConto(conto);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Conto findById (Long id){
