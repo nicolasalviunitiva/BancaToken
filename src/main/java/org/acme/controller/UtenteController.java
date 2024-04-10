@@ -8,6 +8,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
@@ -16,11 +17,11 @@ import jakarta.ws.rs.core.Response;
 public class UtenteController {
 
     private UtenteService utenteService;
-    private ContoService contosService;
+    private ContoService contoService;
 
-    public UtenteController (UtenteService utenteService, ContoService contosService){
+    public UtenteController (UtenteService utenteService, ContoService contoService){
         this.utenteService = utenteService;
-        this.contosService = contosService;
+        this.contoService = contoService;
     }
 
     @POST
@@ -41,6 +42,18 @@ public class UtenteController {
         return utenteService.findById(id);
     }
 
+    @PUT
+    @Transactional
+    @RolesAllowed("User")
+    @Path("/visibilita/{id}/{stato}")
+    public Response modAttivo (@PathParam("id") Long id, @PathParam("stato") boolean stato){
+        Boolean esito = contoService.modAttivo(id, stato);
+        if (esito == true){
+            return Response.ok("Aggiornamento: stato conoto impostato come: "+contoService.findById(id).isAttivo()).build();
+        } else {
+            return Response.status(400).entity("ID utente non trovato").build();
+        }
+    }
     
 
     @GET
@@ -52,7 +65,7 @@ public class UtenteController {
     try{
         if (utenteService.findById(id).getConto().getId() != null){
             Long idConto = utenteService.findById(id).getConto().getId();
-            contosService.deleteById(idConto);
+            contoService.deleteById(idConto);
         }
     } finally {
         boolean esito = utenteService.deleteById(id);

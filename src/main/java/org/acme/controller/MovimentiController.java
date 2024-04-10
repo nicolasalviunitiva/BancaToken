@@ -16,6 +16,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/movimenti")
 public class MovimentiController {
@@ -36,12 +37,15 @@ public class MovimentiController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("/versamento")
-    public String accredito(@QueryParam("id_utente") Long idUtente, @QueryParam("importo") BigDecimal importo) {
-        Utente utente = utenteService.findById(idUtente);
-        BigDecimal somma = utente.getConto().getSaldo().add(importo);
-        utente.getConto().setSaldo(somma);
-        
-        return "versamento";
+    public Response accredito(@QueryParam("id_utente") Long id, @QueryParam("importo") BigDecimal importo) {        
+        Utente utente = utenteService.findById(id);
+        try { 
+            BigDecimal somma = utente.getConto().getSaldo().add(importo);
+            utente.getConto().setSaldo(somma);
+            return Response.ok("Versamento effettuato").build();
+        } catch (NullPointerException e ) {
+            return Response.status(400).entity("ERRORE! verificare il conto corrente").build();
+        }
     }
 
     @POST
@@ -49,18 +53,19 @@ public class MovimentiController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("/prelievo")
-    public String prelievo(@QueryParam("id_utente") Long idUtente, @QueryParam("importo") BigDecimal importo) {
-     
-        BigDecimal saldo = utenteService.findById(idUtente).getConto().getSaldo();
-
-        if (saldo.compareTo(importo) > 0) {
-            Utente utente = utenteService.findById(idUtente);
-            utente.getConto().setSaldo(saldo.subtract(importo));
-        } else {
-            return "Credito insufficiente";
+    public Response prelievo(@QueryParam("id_utente") Long id, @QueryParam("importo") BigDecimal importo) {
+        try {
+            BigDecimal saldo = utenteService.findById(id).getConto().getSaldo();
+            if (saldo.compareTo(importo) > 0) {
+                Utente utente = utenteService.findById(id);
+                utente.getConto().setSaldo(saldo.subtract(importo));
+                return Response.ok("Prelievo effettuato").build();
+            } else {
+                return Response.status(500).entity("ERRORE! Credito insufficiente").build();
+            }
+        }  catch (NullPointerException e ) {
+            return Response.status(400).entity("ERRORE! verificare il conto corrente").build();
         }
-
-        return "prelievo";
     }
 
     @POST
@@ -68,21 +73,24 @@ public class MovimentiController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("/accredito")
-    public String accredito(@QueryParam("id_utente") Long idUtente, @QueryParam("id_conto") Long idConto, @QueryParam("importo") BigDecimal importo) {
+    public Response accredito(@QueryParam("id_utente") Long idUtente, @QueryParam("id_conto") Long idConto, @QueryParam("importo") BigDecimal importo) {
         Conto conto = contoService.findById(idConto);
-        if (conto != null) {
-            Utente utente = utenteService.findById(idUtente);
-            
-            if (utente.getConto().getSaldo().compareTo(importo) > 0) {
-                utente.getConto().setSaldo(utente.getConto().getSaldo().subtract(importo));
-                conto.setSaldo(conto.getSaldo().add(importo));
+        try {
+            if (conto != null) {
+                Utente utente = utenteService.findById(idUtente);
+                if (utente.getConto().getSaldo().compareTo(importo) > 0) {
+                    utente.getConto().setSaldo(utente.getConto().getSaldo().subtract(importo));
+                    conto.setSaldo(conto.getSaldo().add(importo));
+                    return Response.ok("Accredito effettuato").build();
+                } else {
+                    return Response.status(500).entity("ATTENZIONE! Transazione negata, credito insufficiente").build();
+                }
             } else {
-                return "Credito insufficiente";
+                return Response.status(400).entity("ATTENZIONE! Transazione negata, conto Corrente errato").build();
             }
-        } else {
-            return "ATTENZIONE! numeroconto errato!";
+        } catch (NullPointerException e ) {
+            return Response.status(400).entity("ERRORE! verificare il conto corrente").build();
         }
-        return "acredito";
     }
 
     

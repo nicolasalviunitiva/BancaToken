@@ -37,4 +37,13 @@ public class ContoService {
        return contoRepository.deleteById(id);
     }
 
+    public boolean modAttivo (Long id, boolean stato){
+        Conto conto = contoRepository.findById(id);
+        if (conto != null){
+            conto.setAttivo(stato);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
