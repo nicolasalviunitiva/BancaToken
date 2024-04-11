@@ -14,16 +14,34 @@ import jakarta.ws.rs.core.MediaType;
 @RequestScoped
 public class GeneraToken {
 
+  /**
+ * Genera un token JWT con le seguenti proprietà:
+ *
+ * @param issuer L'emittente del token (in questo caso, "Utente").
+ * @param upn Il nome utente da impostare nel token.
+ * @param groups I gruppi associati all'utente (in questo caso, "User").
+ * @param expiresIn La durata del token in secondi (600 secondi = 10 minuti).
+ * @return Il token JWT firmato.
+ */
      String tokenUser =
            Jwt.issuer("UNITIVA") 
-             .upn("NICOLA") //IMPOSTA IL NOME UTENTE DEL TOKEN
+             .upn("Utente") //IMPOSTA IL NOME UTENTE DEL TOKEN
              .groups("User")
              .expiresIn(600) //impostazione durata 10 min
            .sign();
 
+  /**
+ * Genera un token JWT con le seguenti proprietà:
+ *
+ * @param issuer L'emittente del token (in questo caso, "UNITIVA").
+ * @param upn Il nome utente da impostare nel token.
+ * @param groups I gruppi associati all'utente (in questo caso, "User").
+ * @param expiresIn La durata del token in secondi (600 secondi = 10 minuti).
+ * @return Il token JWT firmato.
+ */
     String tokenAdmin =
            Jwt.issuer("UNITIVA") 
-             .upn("NICOLA") //IMPOSTA IL NOME UTENTE DEL TOKEN
+             .upn("Amministratore") //IMPOSTA IL NOME UTENTE DEL TOKEN
              .groups("Admin")
              .expiresIn(600) //impostazione durata 10 min
            .sign();
