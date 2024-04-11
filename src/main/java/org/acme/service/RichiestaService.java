@@ -16,24 +16,19 @@ public class RichiestaService {
 
     public boolean newRichiesta (RichiestaMutuo richiestaMutui){
         if (richiestaMutui != null){
-            richiestaRepository.persist(richiestaMutui);
+            richiestaRepository.persist(richiestaMutui);        
             return true;
         } else {
             return false;
         }
     }
 
-    public RichiestaMutuo findById (Long id){
-        return richiestaRepository.findById(id);
+    public RichiestaMutuo findById (Long idUser){
+        return richiestaRepository.findById(idUser);
     }
 
-    public List<RichiestaMutuo> findByLavorata(boolean lavorata){
-        return richiestaRepository.findByLavorata(lavorata);
+    public List<RichiestaMutuo> findByStato(String stato){
+        return richiestaRepository.findByStato(stato);
     }
-
-    public List<RichiestaMutuo> findByAccettata(boolean accettata){
-        return richiestaRepository.findByAccettata(accettata);
-    }
-
 
 }

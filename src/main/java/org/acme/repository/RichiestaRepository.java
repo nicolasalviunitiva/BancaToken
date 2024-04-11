@@ -10,11 +10,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class RichiestaRepository implements PanacheRepositoryBase <RichiestaMutuo,Long>{
 
-    public List<RichiestaMutuo> findByLavorata(boolean lavorata){
-        return list("lavorata", lavorata);
+    public List<RichiestaMutuo> findByStato(String stato){
+        return list("stato", stato);
     }
 
-    public List<RichiestaMutuo> findByAccettata(boolean accettata){
-        return list("accettata", accettata);
-    }
 }

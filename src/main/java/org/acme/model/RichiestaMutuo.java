@@ -2,6 +2,8 @@ package org.acme.model;
 
 import java.math.BigDecimal;
 
+import org.acme.enumer.Stati;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,33 +21,31 @@ public class RichiestaMutuo extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @Column(name="id_utente")
-    private Long idUtente;
+    @Column(name="id_user")
+    private Long idUser;
 
     @Column(name="importo")
     private BigDecimal importo;
 
-    @Column(name="lavorata")
-    private boolean lavorata;
+    @Column(name="stato")
+    private String stato;
 
-    @Column(name="accettata")
-    private boolean accettata;
-
-    public RichiestaMutuo(){}
-
-    public RichiestaMutuo(Long idUtente, BigDecimal importo) {
-        this.idUtente = idUtente;
-        this.importo = importo;
-        this.lavorata = false;
-        this.accettata = false;
+    public RichiestaMutuo(){
+        this.stato = Stati.LAVORAZIONE.getValue();
     }
 
-    public Long getIdUtente() {
-        return idUtente;
+    public RichiestaMutuo(Long idUser, BigDecimal importo, String stato) {
+        this.idUser = idUser;
+        this.importo = importo;        
+        this.stato = stato;
     }
 
-    public void setIdUtente(Long idUtente) {
-        this.idUtente = idUtente;
+    public Long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 
     public BigDecimal getImporto() {
@@ -56,28 +56,19 @@ public class RichiestaMutuo extends PanacheEntityBase {
         this.importo = importo;
     }
 
-    public boolean isLavorata() {
-        return lavorata;
+    public String getStato() {
+        return stato;
     }
 
-    public void setLavorata(boolean lavorata) {
-        this.lavorata = lavorata;
-    }
-
-    public boolean isAccettata() {
-        return accettata;
-    }
-
-    public void setAccettata(boolean accettata) {
-        this.accettata = accettata;
+    public void setStato(String stato) {
+        this.stato = stato;
     }
 
     @Override
     public String toString() {
-        return "RichiestaMutuo [id=" + id + ", idUtente=" + idUtente + ", importo=" + importo + ", lavorata=" + lavorata
-                + ", accettata=" + accettata + "]";
+        return "RichiestaMutuo [id=" + id + ", idUser=" + idUser + ", importo=" + importo + ", stato=" + stato
+                + "]";
     }
 
- 
 
 }
