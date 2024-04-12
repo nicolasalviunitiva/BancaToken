@@ -50,9 +50,7 @@ public class ContoService {
     }
 
     public void upDate (Conto conto){
-        System.out.println("=== conto prima del salvataggio: "+conto);
         contoRepository.persist(conto);
-        System.out.println("=== conto dopo il salvataggio: "+contoRepository.findById(conto.getId()));
     }
 
     public void addebito (BigDecimal importo, Long id){
