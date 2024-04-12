@@ -6,13 +6,16 @@ import org.acme.model.RichiestaMutuo;
 import org.acme.repository.RichiestaRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+
 
 @ApplicationScoped
 public class RichiestaService {
 
-    @Inject
     private RichiestaRepository richiestaRepository;
+
+    public RichiestaService(RichiestaRepository richiestaRepository){
+        this.richiestaRepository = richiestaRepository;
+    }
 
     public boolean newRichiesta (RichiestaMutuo richiestaMutui){
         if (richiestaMutui != null){
@@ -30,5 +33,6 @@ public class RichiestaService {
     public List<RichiestaMutuo> findByStato(String stato){
         return richiestaRepository.findByStato(stato);
     }
-
+    
+    
 }

@@ -3,8 +3,6 @@ package org.acme.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.acme.enumer.Stati;
-
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,16 +12,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "richiesta_mutuo")
-public class RichiestaMutuo extends PanacheEntityBase {
-
- //   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
- //   String formatted = formatter.format(dataInizio);
+@Table(name="mutui")
+public class Mutui extends PanacheEntityBase {
 
     @Id
-    @Column(name="id_richiesta")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;    
+    @Column(name="id_mutuo")
+    private Long id;
 
     @Column(name="importo")
     private BigDecimal importo;
@@ -43,11 +38,21 @@ public class RichiestaMutuo extends PanacheEntityBase {
     @Column(name="idUser")
     private Long idUser;
 
-    public RichiestaMutuo(){
-        this.stato = Stati.LAVORAZIONE.getValue();
+    @Column(name="ratePagate")
+    private int ratePagate;
+
+    
+    public int getRatePagate() {
+        return ratePagate;
     }
 
-    public RichiestaMutuo(BigDecimal importo, int nRate, BigDecimal impRata, String stato, LocalDate dataInizio, Long idUser) {
+    public void setRatePagate(int ratePagate) {
+        this.ratePagate = ratePagate;
+    }
+
+    public Mutui(){}
+
+    public Mutui(BigDecimal importo, int nRate, BigDecimal impRata, String stato, LocalDate dataInizio, Long idUser) {
         this.importo = importo;
         this.nRate = nRate;
         this.impRata = impRata;
@@ -114,8 +119,8 @@ public class RichiestaMutuo extends PanacheEntityBase {
 
     @Override
     public String toString() {
-        return "RichiestaMutuo [id=" + id + ", importo=" + importo + ", nRate=" + nRate + ", impRata=" + impRata
-                + ", stato=" + stato + ", dataInizio=" + dataInizio + ", idUser=" + idUser + "]";
+        return "Mutui [id=" + id + ", importo=" + importo + ", nRate=" + nRate + ", impRata=" + impRata + ", stato="
+                + stato + ", dataInizio=" + dataInizio + ", idUser=" + idUser + "]";
     }
 
     

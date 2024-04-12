@@ -1,5 +1,7 @@
 package org.acme.service;
 
+import java.math.BigDecimal;
+
 import org.acme.model.Conto;
 import org.acme.model.Utente;
 import org.acme.repository.ContoRepository;
@@ -45,5 +47,17 @@ public class ContoService {
         } else {
             return false;
         }
+    }
+
+    public void upDate (Conto conto){
+        System.out.println("=== conto prima del salvataggio: "+conto);
+        contoRepository.persist(conto);
+        System.out.println("=== conto dopo il salvataggio: "+contoRepository.findById(conto.getId()));
+    }
+
+    public void addebito (BigDecimal importo, Long id){
+        Conto conto = contoRepository.findById(id);
+        conto.setSaldo(conto.getSaldo().subtract(importo));
+        upDate(conto);
     }
 }
