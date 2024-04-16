@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\kind\kompose.exe convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: quarkus-app
+  name: quarkus-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: quarkus-app
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\kind\kompose.exe convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: quarkus-app
+    spec:
+      containers:
+        - env:
+            - name: DATABASE_HOST
+              value: postgres
+            - name: DATABASE_NAME
+              value: postgres
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: POSTGRES_PASSWORD
+              value: dev
+            - name: POSTGRES_USER
+              value: postgres
+          image: unitiva/banca:1.0.0-SNAPSHOT
+          name: quarkus-app
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}

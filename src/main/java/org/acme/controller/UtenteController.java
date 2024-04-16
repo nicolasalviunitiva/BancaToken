@@ -5,10 +5,12 @@ import org.acme.service.UtenteService;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/utente")
@@ -23,6 +25,7 @@ public class UtenteController {
     @POST
     @Transactional
     @Path("/newutente")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response newUtente (Utente utente){
         boolean esito = utenteService.newUtente(utente);
         if(esito == true) {
