@@ -2,8 +2,11 @@ package org.acme.controller;
 
 import org.acme.model.Utente;
 import org.acme.service.UtenteService;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -12,6 +15,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 
 @Path("/utente")
 public class UtenteController {
@@ -22,12 +26,17 @@ public class UtenteController {
         this.utenteService = utenteService;
     }
 
+    @Inject
+    @Channel("new-utente")
+    Emitter<String> userEmitter;
+
     @POST
     @Transactional
     @Path("/newutente")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newUtente (Utente utente){
         boolean esito = utenteService.newUtente(utente);
+        userEmitter.send(utente.toString());
         if(esito == true) {
             return Response.ok("Utente creato correttamente").build();
         } else {
